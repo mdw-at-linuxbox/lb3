@@ -37,6 +37,7 @@ const char *my_container;
 
 int nt = 1;
 int wflag;
+int Wflag;
 int vflag;
 int fixed_size = 0;
 
@@ -366,6 +367,7 @@ worker_thread(void *a)
 		case W_RMB:
 			if (!wflag) break;
 		case W_DEL:
+			if (Wflag) break;
 			wait_until_exists(wp->what);
 		}
 		std::unique_lock<std::mutex> lock(makedataarg->upload_mutex);
@@ -527,6 +529,9 @@ int main(int ac, char **av)
 			fprintf(stderr,"Bad multicount <%s>\n", cp);
 			goto Usage;
 		}
+		break;
+	case 'W':
+		++Wflag;
 		break;
 	case 'w':
 		++wflag;
